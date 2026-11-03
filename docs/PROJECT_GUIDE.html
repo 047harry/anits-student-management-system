@@ -1,0 +1,299 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>ANITS // B.Tech SMS - Project Architecture & Technical Guide</title>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Chakra+Petch:wght@500;700&family=JetBrains+Mono:wght@400;600;800&family=Space+Grotesk:wght@400;600;700&display=swap');
+
+    :root {
+      --bg: #0A0E17;
+      --surface: #121824;
+      --card-bg: #1A2234;
+      --cyan: #00F0FF;
+      --yellow: #FFE600;
+      --pink: #FF007F;
+      --green: #00FF66;
+      --text: #F1F5F9;
+      --muted: #94A3B8;
+      --border: #334155;
+    }
+
+    @media print {
+      body {
+        background: #ffffff !important;
+        color: #000000 !important;
+      }
+      .card, table, header {
+        border-color: #000000 !important;
+        background: #ffffff !important;
+        color: #000000 !important;
+        box-shadow: none !important;
+      }
+      .no-print {
+        display: none !important;
+      }
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      font-family: 'Space Grotesk', sans-serif;
+      line-height: 1.6;
+      padding: 2.5rem 1.5rem;
+    }
+
+    .container {
+      max-width: 900px;
+      margin: 0 auto;
+    }
+
+    header {
+      border: 4px solid var(--yellow);
+      background: var(--surface);
+      padding: 2.5rem;
+      margin-bottom: 2.5rem;
+      box-shadow: 6px 6px 0px var(--yellow);
+    }
+
+    .badge {
+      display: inline-block;
+      padding: 0.25rem 0.75rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.75rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      background: var(--yellow);
+      color: #000;
+      border: 2px solid #000;
+      margin-bottom: 1rem;
+    }
+
+    h1 {
+      font-family: 'Chakra Petch', sans-serif;
+      font-size: 2.75rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: -0.02em;
+      line-height: 1.1;
+      margin-bottom: 0.75rem;
+    }
+
+    h1 span {
+      color: var(--pink);
+    }
+
+    h2 {
+      font-family: 'Chakra Petch', sans-serif;
+      font-size: 1.75rem;
+      text-transform: uppercase;
+      border-bottom: 3px solid var(--border);
+      padding-bottom: 0.5rem;
+      margin: 2.5rem 0 1.25rem 0;
+      color: var(--cyan);
+    }
+
+    h3 {
+      font-family: 'Chakra Petch', sans-serif;
+      font-size: 1.25rem;
+      text-transform: uppercase;
+      margin-bottom: 0.5rem;
+    }
+
+    p {
+      margin-bottom: 1rem;
+      color: #CBD5E1;
+      font-size: 1rem;
+    }
+
+    .card {
+      border: 2px solid var(--border);
+      background: var(--surface);
+      padding: 1.5rem;
+      margin-bottom: 1.5rem;
+      box-shadow: 4px 4px 0px rgba(0, 240, 255, 0.2);
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      margin: 1.5rem 0;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85rem;
+    }
+
+    th, td {
+      border: 1px solid var(--border);
+      padding: 0.75rem 1rem;
+      text-align: left;
+    }
+
+    th {
+      background: #1E293B;
+      color: var(--yellow);
+      text-transform: uppercase;
+      font-weight: 800;
+    }
+
+    tr:nth-child(even) {
+      background: rgba(255, 255, 255, 0.02);
+    }
+
+    code {
+      font-family: 'JetBrains Mono', monospace;
+      background: #1E293B;
+      color: var(--cyan);
+      padding: 0.15rem 0.4rem;
+      font-size: 0.9em;
+      border: 1px solid #334155;
+    }
+
+    pre {
+      background: #000;
+      border: 2px solid var(--border);
+      padding: 1rem;
+      overflow-x: auto;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85rem;
+      color: var(--green);
+      margin-bottom: 1rem;
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.5rem;
+    }
+
+    @media (max-width: 650px) {
+      .grid-2 {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .print-btn {
+      display: inline-block;
+      padding: 0.6rem 1.2rem;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 0.85rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      background: var(--pink);
+      color: #fff;
+      border: 2px solid #000;
+      box-shadow: 3px 3px 0px #000;
+      cursor: pointer;
+      text-decoration: none;
+      margin-top: 1rem;
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    
+    <header>
+      <div class="badge">ANIL NEERUKONDA INSTITUTE OF TECHNOLOGY & SCIENCES (ANITS)</div>
+      <h1>ANITS <span>//</span> B.TECH SMS</h1>
+      <p style="font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; color: var(--cyan);">
+        Autonomous Engineering Portal • Full Stack MERN Reference Architecture
+      </p>
+      <button class="print-btn no-print" onclick="window.print()">🖨️ Export / Print to PDF</button>
+    </header>
+
+    <h2>1. System Architecture & Role Model</h2>
+    <div class="grid-2">
+      <div class="card">
+        <h3 style="color: var(--pink);">👨‍🏫 ANITS Faculty Role</h3>
+        <p>Faculty members log in to an executive command roster:</p>
+        <ul style="padding-left: 1.25rem; font-size: 0.9rem; margin-bottom: 0.5rem;">
+          <li>View full roster of all students across ANITS engineering branches.</li>
+          <li>Full CRUD capability: Add new students, update marks/CGPA, or delete records.</li>
+          <li>Aggregate analytics: Mean CGPA, attendance warnings (&lt;75% quota).</li>
+          <li>Review completed timed assessment scores.</li>
+        </ul>
+      </div>
+
+      <div class="card">
+        <h3 style="color: var(--green);">👨‍🎓 ANITS Student Role</h3>
+        <p>Enforces strict privacy boundaries via JWT authorization:</p>
+        <ul style="padding-left: 1.25rem; font-size: 0.9rem; margin-bottom: 0.5rem;">
+          <li>Students can <strong>only view their own profile</strong>.</li>
+          <li>ANITS Digital B.Tech ID badge with 12-digit Roll Number / USN.</li>
+          <li>Personal CGPA and attendance telemetry gauge.</li>
+          <li>Direct access to the Timed Assessment Examination Chamber.</li>
+        </ul>
+      </div>
+    </div>
+
+    <h2>2. Core System Features & Architecture</h2>
+    <table>
+      <thead>
+        <tr>
+          <th>Feature</th>
+          <th>Capability Description</th>
+          <th>Implementation Details</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <td><strong>Interactive Timed Assessment Chamber</strong></td>
+          <td>Real-time evaluation engine with embedded JS timer</td>
+          <td>Assessment chamber with a 120s countdown timer. Automatically grades and syncs score into MongoDB.</td>
+        </tr>
+        <tr>
+          <td><strong>Modular Enterprise Node.js Backend</strong></td>
+          <td>Separation of concerns via ES Modules</td>
+          <td>ES Modules (<code>import</code>/<code>export</code>) with modular controllers, routes, models, and middleware.</td>
+        </tr>
+        <tr>
+          <td><strong>RESTful API & Postman Verification</strong></td>
+          <td>Industry-standard HTTP endpoints</td>
+          <td>RESTful API with pre-built Postman collection (<code>docs/BTech_SMS_Postman_Collection.json</code>).</td>
+        </tr>
+        <tr>
+          <td><strong>Dual React Architecture</strong></td>
+          <td>Class & Functional Components with lifecycles</td>
+          <td>Class Components (<code>QuizTimerComponent</code>, <code>LiveClockWidget</code>) + Functional Hooks.</td>
+        </tr>
+        <tr>
+          <td><strong>Full HTTP Method Suite</strong></td>
+          <td>Standardized RESTful CRUD operations</td>
+          <td>Full implementation of <code>GET</code>, <code>POST</code>, <code>PUT</code>, <code>DELETE</code>.</td>
+        </tr>
+        <tr>
+          <td><strong>Cloud Data Layer</strong></td>
+          <td>MongoDB Atlas & Mongoose schema validation</td>
+          <td>Create, Read, Update, and Delete operations on B.Tech student profiles with validation.</td>
+        </tr>
+        <tr>
+          <td><strong>Cryptographic Security</strong></td>
+          <td>JWT Bearer tokens & Salted bcrypt hashing</td>
+          <td>Salted bcrypt password hashing and Bearer JWT authorization middleware.</td>
+        </tr>
+        <tr>
+          <td><strong>Production Cloud Deployment</strong></td>
+          <td>Zero-config deployment readiness</td>
+          <td>Production-ready for Vercel/Netlify (frontend) and Render/Atlas (backend).</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <h2>3. Cloud Database Connection (MongoDB Atlas)</h2>
+    <div class="card">
+      <p>Your cluster is actively connected via <code>server/.env</code>:</p>
+      <pre>MONGO_URI=mongodb+srv://myAtlasDBUser:D4ToQBPu4diamW8Y@myatlasclusteredu.kuvvqmy.mongodb.net/btech_student_portal?retryWrites=true&w=majority&authSource=admin</pre>
+      <p>Direct live persistence to MongoDB Atlas Cloud.</p>
+    </div>
+
+  </div>
+
+</body>
+</html>

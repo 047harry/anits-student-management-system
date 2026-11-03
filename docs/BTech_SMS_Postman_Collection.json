@@ -1,0 +1,306 @@
+{
+  "info": {
+    "_postman_id": "btech-sms-api-collection-2026",
+    "name": "NEXUS B.Tech Student Management System API",
+    "description": "Complete REST API collection fulfilling Points 7 to 15 (JWT Auth, Mongoose CRUD, Timed Assessment)",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {
+      "key": "baseUrl",
+      "value": "http://localhost:5000/api",
+      "type": "string"
+    },
+    {
+      "key": "teacherToken",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "studentToken",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "studentId",
+      "value": "",
+      "type": "string"
+    },
+    {
+      "key": "quizId",
+      "value": "",
+      "type": "string"
+    }
+  ],
+  "item": [
+    {
+      "name": "System Health",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": {
+          "raw": "{{baseUrl}}/health",
+          "host": ["{{baseUrl}}"],
+          "path": ["health"]
+        }
+      }
+    },
+    {
+      "name": "Auth: Login Teacher",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "var jsonData = pm.response.json();",
+              "if (jsonData.token) {",
+              "    pm.collectionVariables.set('teacherToken', jsonData.token);",
+              "}"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"teacher@nexus.edu\",\n  \"password\": \"Password123!\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/auth/login",
+          "host": ["{{baseUrl}}"],
+          "path": ["auth", "login"]
+        }
+      }
+    },
+    {
+      "name": "Auth: Login Student",
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "exec": [
+              "var jsonData = pm.response.json();",
+              "if (jsonData.token) {",
+              "    pm.collectionVariables.set('studentToken', jsonData.token);",
+              "}"
+            ],
+            "type": "text/javascript"
+          }
+        }
+      ],
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"email\": \"student@nexus.edu\",\n  \"password\": \"Password123!\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/auth/login",
+          "host": ["{{baseUrl}}"],
+          "path": ["auth", "login"]
+        }
+      }
+    },
+    {
+      "name": "Auth: Register Student (USN / Roll)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"name\": \"Varun Raman\",\n  \"email\": \"varun.r@nexus.edu\",\n  \"password\": \"Password123!\",\n  \"role\": \"student\",\n  \"rollNo\": \"22BCSE255\",\n  \"department\": \"CSE\",\n  \"year\": 3,\n  \"semester\": 6\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/auth/register",
+          "host": ["{{baseUrl}}"],
+          "path": ["auth", "register"]
+        }
+      }
+    },
+    {
+      "name": "Students: Get All (Teacher Only)",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{teacherToken}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/students?department=ALL",
+          "host": ["{{baseUrl}}"],
+          "path": ["students"],
+          "query": [
+            {
+              "key": "department",
+              "value": "ALL"
+            }
+          ]
+        }
+      }
+    },
+    {
+      "name": "Students: Get Class Stats Overview (Teacher)",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{teacherToken}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/students/stats/overview",
+          "host": ["{{baseUrl}}"],
+          "path": ["students", "stats", "overview"]
+        }
+      }
+    },
+    {
+      "name": "Students: Get My Own Profile (Student Only)",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{studentToken}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/students/me",
+          "host": ["{{baseUrl}}"],
+          "path": ["students", "me"]
+        }
+      }
+    },
+    {
+      "name": "Students: Create Student Record (Teacher CRUD - Create)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{teacherToken}}"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"rollNo\": \"22BCSE301\",\n  \"name\": \"Maya Angel\",\n  \"email\": \"maya.a@nexus.edu\",\n  \"phone\": \"+91 99000 11223\",\n  \"department\": \"AI&DS\",\n  \"year\": 3,\n  \"semester\": 6,\n  \"section\": \"B\",\n  \"cgpa\": 9.1,\n  \"attendancePercentage\": 94,\n  \"skills\": [\"PyTorch\", \"React\", \"Python\"],\n  \"projectTitle\": \"Computer Vision for Edge Robotics\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/students",
+          "host": ["{{baseUrl}}"],
+          "path": ["students"]
+        }
+      }
+    },
+    {
+      "name": "Students: Update Student Record (Teacher CRUD - Update)",
+      "request": {
+        "method": "PUT",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{teacherToken}}"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"cgpa\": 9.35,\n  \"attendancePercentage\": 96,\n  \"projectTitle\": \"Computer Vision for Autonomous Quadcopters\"\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/students/{{studentId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["students", "{{studentId}}"]
+        }
+      }
+    },
+    {
+      "name": "Students: Delete Student Record (Teacher CRUD - Delete)",
+      "request": {
+        "method": "DELETE",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{teacherToken}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/students/{{studentId}}",
+          "host": ["{{baseUrl}}"],
+          "path": ["students", "{{studentId}}"]
+        }
+      }
+    },
+    {
+      "name": "Quiz: Get Assessments (Point 7)",
+      "request": {
+        "method": "GET",
+        "header": [
+          {
+            "key": "Authorization",
+            "value": "Bearer {{studentToken}}"
+          }
+        ],
+        "url": {
+          "raw": "{{baseUrl}}/quizzes",
+          "host": ["{{baseUrl}}"],
+          "path": ["quizzes"]
+        }
+      }
+    },
+    {
+      "name": "Quiz: Submit Answers with Timer Score (Point 7)",
+      "request": {
+        "method": "POST",
+        "header": [
+          {
+            "key": "Content-Type",
+            "value": "application/json"
+          },
+          {
+            "key": "Authorization",
+            "value": "Bearer {{studentToken}}"
+          }
+        ],
+        "body": {
+          "mode": "raw",
+          "raw": "{\n  \"answers\": {\n    \"0\": 0,\n    \"1\": 1,\n    \"2\": 1,\n    \"3\": 1,\n    \"4\": 1\n  },\n  \"timeTakenSeconds\": 45\n}"
+        },
+        "url": {
+          "raw": "{{baseUrl}}/quizzes/{{quizId}}/submit",
+          "host": ["{{baseUrl}}"],
+          "path": ["quizzes", "{{quizId}}", "submit"]
+        }
+      }
+    }
+  ]
+}
